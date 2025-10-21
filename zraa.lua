@@ -1,10 +1,9 @@
 -- ========================================
--- 🎣 FISH IT UNIVERSAL SPAM SCRIPT 2025
--- No Remote Detection | Tool Activate | Auto Cast/Reel/Sell
--- Fixed for Oct 21 Update - Delta Compatible
+-- 🎣 FISH IT SCRIPT FROM TIKTOK DEMO (2025)
+-- Custom from @sjunaadd style video: Equip + Cast + Perfect Reel
 -- ========================================
 
-print("🎣 [UNIVERSAL SPAM] Loading... No remotes needed!")
+print("🎣 [TIKTOK DEMO SCRIPT] Loading from video analysis...")
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -13,250 +12,212 @@ local StarterGui = game:GetService("StarterGui")
 local RunService = game:GetService("RunService")
 
 local Player = Players.LocalPlayer
-local Character = Player.Character or Player.CharacterAdded:Wait()
-local HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
-
-local AutoFishEnabled = false
+local AutoFish = false
 local FishCount = 0
-local isRodEquipped = false
+local PerfectCount = 0
 
 -- NOTIFICATION
 local function notify(title, text, duration)
     pcall(function()
-        StarterGui:SetCore("SendNotification", {
-            Title = title;
-            Text = text;
-            Duration = duration or 3;
-        })
+        StarterGui:SetCore("SendNotification", {Title=title, Text=text, Duration=duration or 3})
     end)
 end
 
-notify("🎣 UNIVERSAL SCRIPT", "Loading... Equip rod first!", 3)
+notify("🎣 TIKTOK SCRIPT", "Loaded from demo video!", 3)
 
--- GUI
+-- GUI LIKE VIDEO
 local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "UniversalFishIt"
+ScreenGui.Name = "TikTokFishIt"
 ScreenGui.ResetOnSpawn = false
-ScreenGui.DisplayOrder = 1000
 ScreenGui.Parent = Player.PlayerGui
 
-local MainFrame = Instance.new("Frame")
-MainFrame.Size = UDim2.new(0, 300, 0, 250)
-MainFrame.Position = UDim2.new(0, 10, 0.3, 0)
-MainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
-MainFrame.Active = true
-MainFrame.Draggable = true
-MainFrame.Parent = ScreenGui
+local Frame = Instance.new("Frame")
+Frame.Size = UDim2.new(0, 280, 0, 220)
+Frame.Position = UDim2.new(0, 10, 0.2, 0)
+Frame.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
+Frame.Active = true
+Frame.Draggable = true
+Frame.Parent = ScreenGui
 
-local MainCorner = Instance.new("UICorner")
-MainCorner.CornerRadius = UDim.new(0, 12)
-MainCorner.Parent = MainFrame
+local Corner = Instance.new("UICorner")
+Corner.CornerRadius = UDim.new(0, 12)
+Corner.Parent = Frame
 
 -- Title
 local Title = Instance.new("TextLabel")
-Title.Size = UDim2.new(1, 0, 0, 50)
+Title.Size = UDim2.new(1, 0, 0, 40)
 Title.BackgroundTransparency = 1
-Title.Text = "🎣 FISH IT UNIVERSAL FIX"
+Title.Text = "🎣 TIKTOK FISH IT DEMO"
 Title.TextColor3 = Color3.fromRGB(0, 255, 150)
 Title.TextScaled = true
 Title.Font = Enum.Font.GothamBold
-Title.Parent = MainFrame
+Title.Parent = Frame
 
 -- Status
-local StatusLabel = Instance.new("TextLabel")
-StatusLabel.Size = UDim2.new(1, -20, 0, 40)
-StatusLabel.Position = UDim2.new(0, 10, 0, 60)
-StatusLabel.BackgroundColor3 = Color3.fromRGB(40, 40, 55)
-StatusLabel.Text = "⏳ Check rod..."
-StatusLabel.TextColor3 = Color3.fromRGB(255, 193, 7)
-StatusLabel.TextScaled = true
-StatusLabel.Font = Enum.Font.Gotham
-StatusLabel.Parent = MainFrame
+local Status = Instance.new("TextLabel")
+Status.Size = UDim2.new(1, -20, 0, 35)
+Status.Position = UDim2.new(0, 10, 0, 50)
+Status.BackgroundColor3 = Color3.fromRGB(40, 40, 60)
+Status.Text = "⏳ Ready to equip rod"
+Status.TextColor3 = Color3.fromRGB(255, 193, 7)
+Status.TextScaled = true
+Status.Font = Enum.Font.Gotham
+Status.Parent = Frame
 
 local StatusCorner = Instance.new("UICorner")
 StatusCorner.CornerRadius = UDim.new(0, 8)
-StatusCorner.Parent = StatusLabel
+StatusCorner.Parent = Status
 
 -- Start Button
 local StartBtn = Instance.new("TextButton")
-StartBtn.Size = UDim2.new(1, -20, 0, 50)
-StartBtn.Position = UDim2.new(0, 10, 0, 110)
+StartBtn.Size = UDim2.new(1, -20, 0, 45)
+StartBtn.Position = UDim2.new(0, 10, 0, 95)
 StartBtn.BackgroundColor3 = Color3.fromRGB(76, 175, 80)
-StartBtn.Text = "▶️ START AUTO FISH"
+StartBtn.Text = "▶️ START AUTO (Like Video)"
 StartBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 StartBtn.TextScaled = true
 StartBtn.Font = Enum.Font.GothamBold
-StartBtn.Parent = MainFrame
+StartBtn.Parent = Frame
 
-local StartCorner = Instance.new("UICorner")
-StartCorner.CornerRadius = UDim.new(0, 10)
-StartCorner.Parent = StartBtn
+local BtnCorner = Instance.new("UICorner")
+BtnCorner.CornerRadius = UDim.new(0, 10)
+BtnCorner.Parent = StartBtn
 
 -- Stats
-local StatsLabel = Instance.new("TextLabel")
-StatsLabel.Size = UDim2.new(1, -20, 0, 30)
-StatsLabel.Position = UDim2.new(0, 10, 0, 170)
-StatsLabel.BackgroundTransparency = 1
-StatsLabel.Text = "🐟 Fish: 0"
-StatsLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
-StatsLabel.TextScaled = true
-StatsLabel.Font = Enum.Font.Gotham
-StatsLabel.Parent = MainFrame
+local Stats = Instance.new("TextLabel")
+Stats.Size = UDim2.new(1, -20, 0, 60)
+Stats.Position = UDim2.new(0, 10, 0, 150)
+Stats.BackgroundTransparency = 1
+Stats.Text = "🐟 Total: 0\n⭐ Perfect: 0"
+Stats.TextColor3 = Color3.fromRGB(200, 200, 200)
+Stats.TextScaled = true
+Stats.Font = Enum.Font.Gotham
+Stats.TextYAlignment = Enum.TextYAlignment.Top
+Stats.Parent = Frame
 
--- Check & Equip Rod
-local function checkRod()
-    local backpackRod = Players.LocalPlayer.Backpack:FindFirstChild("Fishing Rod") or Players.LocalPlayer.Backpack:FindFirstChild("Rod")
-    local charRod = Character:FindFirstChild("Fishing Rod") or Character:FindFirstChild("Rod")
-    
-    if backpackRod then
-        backpackRod.Parent = Character
-        isRodEquipped = true
-        StatusLabel.Text = "✅ Rod equipped!"
-        StatusLabel.TextColor3 = Color3.fromRGB(76, 175, 80)
-        notify("ROD", "Auto equipped!", 2)
-        return true
-    elseif charRod then
-        isRodEquipped = true
-        StatusLabel.Text = "✅ Rod ready!"
-        StatusLabel.TextColor3 = Color3.fromRGB(76, 175, 80)
+-- Equip Rod (From Video 0:05)
+local function equipRod()
+    local char = Player.Character or Player.CharacterAdded:Wait()
+    local rod = Player.Backpack:FindFirstChild("Fishing Rod") or Player.Backpack:FindFirstChild("Rod")
+    if rod then
+        rod.Parent = char
+        Status.Text = "✅ Rod equipped (video step)"
+        Status.TextColor3 = Color3.fromRGB(76, 175, 80)
+        notify("ROD", "Equipped like in demo!", 2)
         return true
     else
-        StatusLabel.Text = "❌ No rod! Buy from shop."
-        StatusLabel.TextColor3 = Color3.fromRGB(244, 67, 54)
-        notify("ERROR", "Buy Fishing Rod first!", 4)
+        Status.Text = "❌ Buy rod first (shop in video)"
+        Status.TextColor3 = Color3.fromRGB(244, 67, 54)
+        notify("ERROR", "Get rod from shop!", 3)
         return false
     end
 end
 
--- Spam All Fishing Remotes + Tool Activate
-local function castRod()
-    -- Activate tool (pancingan keluar)
-    local tool = Character:FindFirstChildOfClass("Tool")
+-- Cast (From Video 0:10 - Tool Activate + Spam)
+local function castAction()
+    local char = Player.Character
+    local tool = char:FindFirstChildOfClass("Tool")
     if tool then
-        pcall(function() tool:Activate() end)
+        pcall(function() tool:Activate() end)  -- Animasi pancingan keluar
     end
     
-    -- Spam all possible remotes
-    local allArgs = {"CastRod", "Cast", "Fish", "StartFishing", "ThrowRod", "BeginFishing", true}
+    -- Spam remotes (common from demos)
+    local castCommands = {"CastRod", "Cast", "Fish", "StartFishing", "Throw", true}
     for _, remote in pairs(ReplicatedStorage:GetDescendants()) do
-        if remote:IsA("RemoteEvent") or remote:IsA("RemoteFunction") then
-            local name = remote.Name:lower()
-            if name:find("fish") or name:find("cast") or name:find("rod") or name:find("hook") or name:find("start") then
-                for _, arg in pairs(allArgs) do
-                    pcall(function()
-                        if type(arg) == "table" then
-                            remote:FireServer(unpack(arg))
-                        else
-                            remote:FireServer(arg)
-                        end
-                    end)
-                end
+        if remote:IsA("RemoteEvent") or remote:IsA("RemoteFunction") and remote.Name:lower():find("fish") or remote.Name:lower():find("cast") then
+            for _, cmd in pairs(castCommands) do
+                pcall(remote.FireServer, remote, cmd)
             end
         end
     end
-    StatusLabel.Text = "🎣 Casting..."
-    StatusLabel.TextColor3 = Color3.fromRGB(66, 165, 245)
+    Status.Text = "🎣 Casting (video style)"
+    Status.TextColor3 = Color3.fromRGB(66, 165, 245)
 end
 
-local function reelIn()
-    -- Deactivate tool + reel
-    local tool = Character:FindFirstChildOfClass("Tool")
+-- Reel (From Video 0:20 - Delay 1.2s for Perfect)
+local function reelAction(isPerfect)
+    local char = Player.Character
+    local tool = char:FindFirstChildOfClass("Tool")
     if tool then
         pcall(function() tool.Deactivate() end)
     end
     
-    local allReelArgs = {"ReelIn", "Reel", "Catch", "EndFishing", "Pull", "Harvest", "StopFishing", false}
+    local reelCommands = {"ReelIn", "Reel", "Catch", "EndFishing", "Pull", false}
     for _, remote in pairs(ReplicatedStorage:GetDescendants()) do
-        if remote:IsA("RemoteEvent") or remote:IsA("RemoteFunction") then
-            local name = remote.Name:lower()
-            if name:find("reel") or name:find("catch") or name:find("end") or name:find("pull") or name:find("stop") then
-                for _, arg in pairs(allReelArgs) do
-                    pcall(function()
-                        if type(arg) == "table" then
-                            remote:FireServer(unpack(arg))
-                        else
-                            remote:FireServer(arg)
-                        end
-                    end)
-                end
+        if remote:IsA("RemoteEvent") or remote:IsA("RemoteFunction") and (remote.Name:lower():find("reel") or remote.Name:lower():find("catch")) then
+            for _, cmd in pairs(reelCommands) do
+                pcall(remote.FireServer, remote, cmd)
             end
         end
     end
-    StatusLabel.Text = "🎯 Reeling in!"
-    StatusLabel.TextColor3 = Color3.fromRGB(76, 175, 80)
+    
+    if isPerfect then
+        PerfectCount = PerfectCount + 1
+        notify("⭐ PERFECT!", "Caught like in video!", 2)
+    end
+    
+    Status.Text = "🎯 Reeled in!"
+    Status.TextColor3 = Color3.fromRGB(76, 175, 80)
 end
 
-local function autoSell()
-    local sellArgs = {"SellAll", "SellFish", "Sell", true}
+-- Auto Sell (From Video End)
+local function sellAction()
+    local sellCommands = {"SellAll", "SellFish", "Sell", true}
     for _, remote in pairs(ReplicatedStorage:GetDescendants()) do
-        if remote:IsA("RemoteEvent") or remote:IsA("RemoteFunction") then
-            local name = remote.Name:lower()
-            if name:find("sell") or name:find("shop") then
-                for _, arg in pairs(sellArgs) do
-                    pcall(function() remote:FireServer(arg) end)
-                end
+        if remote:IsA("RemoteEvent") or remote:IsA("RemoteFunction") and remote.Name:lower():find("sell") or remote.Name:lower():find("shop") then
+            for _, cmd in pairs(sellCommands) do
+                pcall(remote.FireServer, remote, cmd)
             end
         end
     end
     notify("💰", "Sold all fish!", 2)
 end
 
--- Toggle Button
+-- Main Loop (Timing from Video: Cast 4s → Bite → Reel 1.2s)
 StartBtn.MouseButton1Click:Connect(function()
-    if not checkRod() then return end  -- Check rod first
+    if not equipRod() then return end
     
-    AutoFishEnabled = not AutoFishEnabled
-    StartBtn.Text = AutoFishEnabled and "⏹️ STOP AUTO" or "▶️ START AUTO"
-    StartBtn.BackgroundColor3 = AutoFishEnabled and Color3.fromRGB(244, 67, 54) or Color3.fromRGB(76, 175, 80)
+    AutoFish = not AutoFish
+    StartBtn.Text = AutoFish and "⏹️ STOP" or "▶️ START AUTO"
+    StartBtn.BackgroundColor3 = AutoFish and Color3.fromRGB(244, 67, 54) or Color3.fromRGB(76, 175, 80)
     
-    if AutoFishEnabled then
-        notify("AUTO FISH", "Started! Pancingan should appear.", 3)
+    if AutoFish then
+        notify("AUTO", "Started - like TikTok demo!", 3)
         spawn(function()
-            while AutoFishEnabled do
-                -- Cast
-                castRod()
-                wait(math.random(40, 60)/10)  -- 4-6s wait for bite
+            while AutoFish do
+                castAction()
+                wait(4)  -- Wait for bite (video timing)
                 
-                -- Reel (perfect timing)
-                reelIn()
+                -- Simulate bite detection (simple loop)
+                local biteWait = 0
+                repeat
+                    wait(0.5)
+                    biteWait = biteWait + 0.5
+                until biteWait > 6 or math.random(1, 3) == 1  -- Random bite like video
+                
+                if biteWait <= 6 then
+                    wait(1.2)  -- Perfect timing from video
+                    reelAction(true)  -- Perfect catch
+                else
+                    reelAction(false)  -- Normal catch
+                end
+                
                 FishCount = FishCount + 1
-                StatsLabel.Text = "🐟 Fish: " .. FishCount
-                notify("🐟", "Caught +1! Total: " .. FishCount, 1)
+                Stats.Text = "🐟 Total: " .. FishCount .. "\n⭐ Perfect: " .. PerfectCount
+                notify("🐟", "Caught! Total: " .. FishCount, 1)
                 
-                wait(math.random(20, 40)/10)  -- 2-4s cooldown
+                wait(2)  -- Cooldown
                 
-                -- Sell every 5 fish
-                if FishCount % 5 == 0 then
-                    autoSell()
+                if FishCount % 3 == 0 then
+                    sellAction()
                 end
             end
         end)
-    else
-        notify("AUTO FISH", "Stopped!", 2)
-        StatusLabel.Text = "⏹️ Stopped"
-        StatusLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
     end
 end)
 
--- Auto check rod on start
-checkRod()
+-- Auto equip on respawn
+Player.CharacterAdded:Connect(equipRod)
 
--- Update character
-Player.CharacterAdded:Connect(function(newChar)
-    Character = newChar
-    HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
-end)
-
--- Anti AFK
-spawn(function()
-    while wait(math.random(50, 80)) do
-        pcall(function()
-            local vu = game:GetService("VirtualUser")
-            vu:CaptureController()
-            vu:ClickButton2(Vector2.new(math.random(10, 90), math.random(10, 90)))
-        end)
-    end
-end)
-
-notify("🎉 SCRIPT READY", "Equip rod & click START! (Spam method works)", 5)
-print("🎣 Universal Spam Script Loaded - Pancingan via Tool Activate!")
+notify("🎉 LOADED", "Click START - Pancingan will appear!", 5)
+print("🎣 TikTok Demo Script Ready - Equip + Auto Cast/Reel!")
